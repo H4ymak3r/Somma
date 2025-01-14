@@ -1,33 +1,26 @@
 name: Somma
 run-name: $"{{ github.actor }}" is starting github actions
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout del codice
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Configurazione dell'ambiente .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '6.0'
+          dotnet-version: '8.0'
 
       - name: Ripristino delle dipendenze NuGet
         run: dotnet restore
 
-      - name: Compilazione della soluzione
-        run: dotnet build --no-restore
+      - name: Compilazione soluzione
+        run: dotnet build --no-restore --configuration Release
 
       - name: Esecuzione dei test
-        run: dotnet test --no-build --fail-on-error
-
-      - name: Termina con errore se i test falliscono
-        if: failure()
-        run: exit 1
+        run: dotnet test --no-build --configuration Release
