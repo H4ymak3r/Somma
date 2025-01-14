@@ -1,35 +1,36 @@
-name: .NET Build and Test Workflow
+name: Somma
+run-name: $"{{ github.actor }}" is starting github actions
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout del codice
-      uses: actions/checkout@v2
+        steps:
+            - name: Checkout del codice
+            uses: actions/checkout@v2
 
-    - name: Configurazione dell'ambiente .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: '6.0'  # Sostituisci con la versione di .NET che stai usando
+            - name: Configurazione dell'ambiente .NET
+            uses: actions/setup-dotnet@v2
+            with:
+                dotnet-version: '6.0'
 
     - name: Ripristino delle dipendenze NuGet
-      run: dotnet restore
+        run: dotnet restore
 
     - name: Compilazione della soluzione
-      run: dotnet build --no-restore
+        run: dotnet build --no-restore
 
     - name: Esecuzione dei test
-      run: dotnet test --no-build --fail-on-error
+        run: dotnet test --no-build --fail-on-error
 
     - name: Termina con errore se i test falliscono
-      if: failure()
-      run: exit 1
+        if: failure()
+        run: exit 1
